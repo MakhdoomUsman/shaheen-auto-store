@@ -2,13 +2,7 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(
-  "mongodb+srv://usman1234:03464482176@syedusman.hanffge.mongodb.net/",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  }
+  "mongodb+srv://usman1234:03464482176@syedusman.hanffge.mongodb.net/"
 );
 
 const db = mongoose.connection;
