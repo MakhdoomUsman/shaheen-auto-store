@@ -7,10 +7,13 @@ const brandController = require('../controllers/brandController');
 router.post('/add-brand', brandController.createBrand);
 
 // Update an existing brand
-router.put('/:brandId', brandController.updateBrand);
+router.put('/update-brand/:brandId', brandController.updateBrand);
 
 // View all brands
-router.get('/', brandController.getAllBrands);
+router.get('/get-all-brands', brandController.getAllBrands);
+
+// Get a single brand by ID
+router.get('/get-single-brand/:id', brandController.getBrandById);
 
 // Delete a brand
 router.delete('/:brandId', brandController.deleteBrand);
