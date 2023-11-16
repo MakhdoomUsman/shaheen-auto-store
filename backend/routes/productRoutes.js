@@ -12,6 +12,9 @@ router.put('/:productId', productController.updateProduct);
 // View all products
 router.get('/get-all-product', productController.getAllProducts);
 
+// Veiw single product by ID  
+router.get('/:id', productController.getProductById);
+
 // Delete a product
 router.delete('/:productId', productController.deleteProduct);
 

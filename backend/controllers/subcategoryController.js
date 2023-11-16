@@ -1,5 +1,5 @@
 // controllers/subcategoryController.js
-const SubCategory = require('../models/SubCategory');
+const SubCategory = require("../models/SubCategory");
 
 // Create a new subcategory
 const createSubCategory = async (req, res) => {
@@ -9,7 +9,7 @@ const createSubCategory = async (req, res) => {
     res.status(201).json(newSubCategory);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -25,13 +25,13 @@ const updateSubCategory = async (req, res) => {
     );
 
     if (!updatedSubCategory) {
-      return res.status(404).json({ error: 'SubCategory not found' });
+      return res.status(404).json({ error: "SubCategory not found" });
     }
 
     res.json(updatedSubCategory);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -40,6 +40,23 @@ const getAllSubCategories = async (req, res) => {
   try {
     const subcategories = await SubCategory.find();
     res.json(subcategories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// Get a single subcategory by ID
+const getSubcategoryById = async (req, res) => {
+  try {
+    const subcategoryId = req.params.id;
+    const subcategory = await Subcategory.findById(subcategoryId);
+
+    if (!subcategory) {
+      return res.status(404).json({ error: 'Subcategory not found' });
+    }
+
+    res.status(200).json(subcategory);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -51,16 +68,18 @@ const deleteSubCategory = async (req, res) => {
   const { subCategoryId } = req.params;
 
   try {
-    const deletedSubCategory = await SubCategory.findByIdAndDelete(subCategoryId);
+    const deletedSubCategory = await SubCategory.findByIdAndDelete(
+      subCategoryId
+    );
 
     if (!deletedSubCategory) {
-      return res.status(404).json({ error: 'SubCategory not found' });
+      return res.status(404).json({ error: "SubCategory not found" });
     }
 
-    res.json({ message: 'SubCategory deleted successfully' });
+    res.json({ message: "SubCategory deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -73,7 +92,7 @@ const getSubCategoriesByCategory = async (req, res) => {
     res.json(subcategories);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -82,5 +101,6 @@ module.exports = {
   updateSubCategory,
   getAllSubCategories,
   deleteSubCategory,
+  getSubcategoryById,
   getSubCategoriesByCategory,
 };

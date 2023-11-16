@@ -4,7 +4,7 @@ const router = express.Router();
 const brandController = require('../controllers/brandController');
 
 // Create a new brand
-router.post('/', brandController.createBrand);
+router.post('/add-brand', brandController.createBrand);
 
 // Update an existing brand
 router.put('/:brandId', brandController.updateBrand);

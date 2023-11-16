@@ -5,13 +5,16 @@ const subcategoryController = require('../controllers/subcategoryController');
 const brandController = require('../controllers/brandController');
 
 // Create a new subcategory
-router.post('/', subcategoryController.createSubCategory);
+router.post('/add-subcategory', subcategoryController.createSubCategory);
 
 // Update an existing subcategory
 router.put('/:subCategoryId', subcategoryController.updateSubCategory);
 
 // View all subcategories
-router.get('/', subcategoryController.getAllSubCategories);
+router.get('/get-all-subcategory', subcategoryController.getAllSubCategories);
+
+// Get a single category by ID
+router.get('/:subcategoryId', subcategoryController.getSubcategoryById);
 
 // Delete a subcategory
 router.delete('/:subCategoryId', subcategoryController.deleteSubCategory);

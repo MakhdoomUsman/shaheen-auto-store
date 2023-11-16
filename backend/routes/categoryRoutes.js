@@ -5,13 +5,16 @@ const categoryController = require('../controllers/categoryController');
 const subcategoryController = require('../controllers/subcategoryController');
 
 // Create a new category
-router.post('/', categoryController.createCategory);
+router.post('/add-category', categoryController.createCategory);
 
 // Update an existing category
-router.put('/:categoryId', categoryController.updateCategory);
+router.put('/update-category/:categoryId', categoryController.updateCategory);
 
 // View all categories
-router.get('/', categoryController.getAllCategories);
+router.get('/get-all-category', categoryController.getAllCategories);
+
+// View single category 
+router.get('/:id', categoryController.getCategoryById);
 
 // Delete a category
 router.delete('/:categoryId', categoryController.deleteCategory);

@@ -7,21 +7,21 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Product Name is required"],
     },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: [true, "Category is required"],
-    },
-    subcategory: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SubCategory",
-      required: [true, "SubCategory is required"],
-    },
-    brand: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Brand",
-      required: [true, "Brand is required"],
-    },
+    // category: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Category",
+    //   required: [true, "Category is required"],
+    // },
+    // subcategory: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "SubCategory",
+    //   required: [true, "SubCategory is required"],
+    // },
+    // brand: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Brand",
+    //   required: [true, "Brand is required"],
+    // },
     unit: {
       type: String,
       required: [true, "Unit is required"],
@@ -34,8 +34,13 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Minimum Quantity is required"],
     },
-    quantity: Number,
-    disc: Number,
+    quantity: {
+      type: String,
+      required: [true, "Quantity is required"],
+    },
+    disc: {
+      type: String,
+    },
     tax: Number,
     discount_type: String,
     discount: Number,
