@@ -2,6 +2,7 @@ import React from "react";
 import Container from "../Container/Container";
 
 const OverallInventory = () => {
+  const { outOfStockProduct } = useSelector((state) => state.product);
   return (
     <Container>
       <div className="border rounded-lg shadow-sm p-5">
@@ -28,7 +29,7 @@ const OverallInventory = () => {
           <div className="border p-2.5 rounded bg-red-50">
             <h1 className="font-semibold text-red-500">Low Stocks</h1>
             <div className="font-semibold text-sm flex justify-between">
-              <p>12</p>
+              <p>{outOfStockProduct}</p>
               <p>4</p>
             </div>
             <div className="text-sm text-gray-500 flex justify-between">

@@ -4,7 +4,7 @@ import AdvanceTable from "../Table/Advancetable/Table";
 import axios from "axios";
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState({});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -26,7 +26,7 @@ const Products = () => {
     <div>
       <Container>
         <div className="my-5">
-          <AdvanceTable products={products} />
+          <AdvanceTable products={products?.products} addButton={"add-inventory"} />
         </div>
       </Container>
     </div>

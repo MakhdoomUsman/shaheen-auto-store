@@ -38,13 +38,29 @@ const updateProduct = async (req, res) => {
 // Get all products
 const getAllProducts = async (req, res) => {
   try {
+    // Fetch all products
     const products = await Product.find();
-    res.json(products);
+
+    // Calculate total number of products
+    const totalProducts = products.length;
+
+    // Calculate the count of products where quantity <= minimum_quantity
+    const lowQuantityProducts = products.filter(product => product.quantity <= product.minimum_quantity).length;
+
+    // Prepare the response
+    const response = {
+      totalProducts,
+      lowQuantityProducts,
+      products
+    };
+
+    res.json(response);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 // get single product by id
 const getProductById = async (req, res) => {

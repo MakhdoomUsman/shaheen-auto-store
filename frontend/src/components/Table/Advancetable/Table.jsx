@@ -21,6 +21,7 @@ import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { columns, product, statusOptions } from "./data";
 import { capitalize } from "./utils";
+import { useRouter } from "next/router";
 
 const statusColorMap = {
   active: "success",
@@ -39,7 +40,8 @@ const INITIAL_VISIBLE_COLUMNS = [
   "actions",
 ];
 
-const AdvanceTable = ({ products }) => {
+const AdvanceTable = ({products}) => {
+  const route = useRouter();
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -240,7 +242,7 @@ const AdvanceTable = ({ products }) => {
             <Button
               color="primary"
               endContent={<PlusIcon />}
-              onClick={() =>  console.log("add data")}
+              onClick={() => route.push(addButton)}
             >
               Add New
             </Button>
