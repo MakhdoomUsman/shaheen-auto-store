@@ -1,6 +1,8 @@
 // controllers/productController.js
+const vehicleView = require("../Views/vehicleView");
 const Product = require("../models/Product");
-
+const productModel = require("../models/handleModels/productModel");
+const utils = require("../utils/utils");
 // Create a new product
 const createProduct = async (req, res) => {
   try {
@@ -38,29 +40,53 @@ const updateProduct = async (req, res) => {
 // Get all products
 const getAllProducts = async (req, res) => {
   try {
+    // console.log(req.query.page);
     // Fetch all products
-    const products = await Product.find();
 
-    // Calculate total number of products
-    const totalProducts = products.length;
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 12;
+    const sortDesc = req.query.sortDesc === "desc"; // Convert to boolean
+    const query = req.query.query || "";
 
-    // Calculate the count of products where quantity <= minimum_quantity
-    const lowQuantityProducts = products.filter(product => product.quantity <= product.minimum_quantity).length;
+    const skip = (page - 1) * itemsPerPage;
 
-    // Prepare the response
-    const response = {
-      totalProducts,
-      lowQuantityProducts,
-      products
-    };
+    const paginatedRecords = await productModel.getPaginatedData(
+      itemsPerPage,
+      skip,
+      sortDesc,
+      query
+    );
+    req.total = await productModel.getTotalRecords(query);
 
+    const response = utils.generateResponse(
+      "SUCCESS",
+      200,
+      "Products List!",
+      paginatedRecords,
+      req
+    );
     res.json(response);
   } catch (error) {
-    console.error(error);
+    console.error("Error in getVehicles:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-};
+  // const products = await Product.find();
 
+  // // Calculate total number of products
+  // const totalProducts = products.length;
+
+  // // Calculate the count of products where quantity <= minimum_quantity
+  // const lowQuantityProducts = products.filter(product => product.quantity <= product.minimum_quantity).length;
+
+  // // Prepare the response
+  // const response = {
+  //   totalProducts,
+  //   lowQuantityProducts,
+  //   products
+  // };
+
+  // res.json(response);
+};
 
 // get single product by id
 const getProductById = async (req, res) => {

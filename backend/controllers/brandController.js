@@ -1,5 +1,7 @@
 // controllers/brandController.js
 const Brand = require("../models/Brand");
+const brandModel = require("../models/handleModels/brandModel");
+const utils = require("../utils/utils");
 
 // Create a new brand
 const createBrand = async (req, res) => {
@@ -37,10 +39,34 @@ const updateBrand = async (req, res) => {
 // Get all brands
 const getAllBrands = async (req, res) => {
   try {
-    const brands = await Brand.find();
-    res.json(brands);
+    // console.log(req.query.page);
+    // Fetch all products
+
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 12;
+    const sortDesc = req.query.sortDesc === "desc"; // Convert to boolean
+    const query = req.query.query || "";
+
+    const skip = (page - 1) * itemsPerPage;
+
+    const paginatedRecords = await brandModel.getPaginatedData(
+      itemsPerPage,
+      skip,
+      sortDesc,
+      query
+    );
+    req.total = await brandModel.getTotalRecords(query);
+
+    const response = utils.generateResponse(
+      "SUCCESS",
+      200,
+      "Products List!",
+      paginatedRecords,
+      req
+    );
+    res.json(response);
   } catch (error) {
-    console.error(error);
+    console.error("Error in getVehicles:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

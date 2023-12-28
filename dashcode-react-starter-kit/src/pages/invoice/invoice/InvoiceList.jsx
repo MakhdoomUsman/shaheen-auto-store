@@ -50,23 +50,7 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
         }
       },
     },
-    {
-      name: "P-Link",
-      permission: "payment-page",
-      icon: "ph:paper-plane-right",
-      doit: (row) => {
-        // window.addEventListener('storage', () => {
-        //     // console.log('another window or tab is working on the same localStorage')
-        //     console.log(localStorage.getItem('api_counter'))
-        //     //window.close();
-        // }, false)
-        //console.log(row?.cell?.row?.original?.link_ref);
-        window.open(
-          window.location.origin + "/payment/" + row?.cell?.value,
-          "_blank"
-        );
-      },
-    },
+
     {
       name: "view",
       permission: "invoice-preview",
@@ -91,25 +75,16 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
   ];
   const COLUMNS = [
     {
-      Header: "Order",
-      accessor: "invoice_ref",
+      Header: "SKU",
+      accessor: "sku",
       Cell: (row) => {
         //return <span onClick={() => console.log(row?.cell?.row?.original)}>#{row?.cell?.value}</span>;
-        return (
-          <span
-            className="text-blue-600"
-            onClick={() =>
-              navigate("/invoice-preview/" + row?.cell?.row?.original?.uuid)
-            }
-          >
-            #{row?.cell?.value}
-          </span>
-        );
+        return <span className="">{row?.cell?.value}</span>;
       },
     },
     {
-      Header: "customer",
-      accessor: "name",
+      Header: "Product name",
+      accessor: "product_name",
       Cell: (row) => {
         return (
           <div
@@ -127,15 +102,15 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
       },
     },
     {
-      Header: "date",
-      accessor: "issued_date",
+      Header: "Min. Qty",
+      accessor: "minimum_quantity",
       Cell: (row) => {
         return <span>{row?.cell?.value}</span>;
       },
     },
     {
-      Header: "Currency",
-      accessor: "currency",
+      Header: "Buy price (pkr)",
+      accessor: "price",
       Cell: (row) => {
         return (
           <span
@@ -143,28 +118,15 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
               navigate("/invoice-preview/" + row?.cell?.row?.original?.uuid)
             }
           >
-            {row?.cell?.value?.coin?.asset_name}
+            {row?.cell?.value}
           </span>
         );
       },
     },
     {
-      Header: "Invoice Type",
-      accessor: "invoice_type",
+      Header: "Selling price (pkr)",
+      accessor: "selling_price",
       Cell: (row) => {
-        return (
-          <div
-            onClick={() =>
-              navigate("/invoice-preview/" + row?.cell?.row?.original?.uuid)
-            }
-          >
-            <span className="inline-flex items-center">
-              <span className="text-sm text-slate-600 dark:text-slate-300 capitalize">
-                {row?.cell?.value == "S" ? "Sale" : "Recursion"}
-              </span>
-            </span>
-          </div>
-        );
         return <span>{row?.cell?.value}</span>;
       },
     },
@@ -185,16 +147,16 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
     },
     {
       Header: "status",
-      accessor: "payment_status",
+      accessor: "status",
       Cell: (row) => {
         return (
           <span className="block w-full">
             <span
               className={` inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 ${
-                row?.cell?.value === "success"
+                row?.cell?.value === "active"
                   ? "text-success-500 bg-success-500"
                   : ""
-              } 
+              }
                   ${
                     row?.cell?.value === "pending"
                       ? "text-warning-500 bg-warning-500"
@@ -211,7 +173,7 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
                       ? "text-primary-500 bg-primary-500"
                       : ""
                   }
-                  
+
                    `}
             >
               {row?.cell?.value}
@@ -236,29 +198,26 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
               // positionClass="absolute"
             >
               <div className="divide-y divide-slate-100 dark:divide-slate-800 ">
-                {actions.map(
-                  (item, i) =>
-                    userPermission.includes(item.permission) && (
-                      <div
-                        key={i}
-                        onClick={() => item.doit(row)}
-                        className={`
-                      
+                {actions.map((item, i) => (
+                  <div
+                    key={i}
+                    onClick={() => item.doit(row)}
+                    className={`
+
                         ${
                           item.name === "delete"
                             ? "bg-danger-500 text-danger-500 bg-opacity-30   hover:bg-opacity-100 hover:text-white"
                             : "hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 dark:hover:bg-opacity-50"
                         }
-                         w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer 
+                         w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm  last:mb-0 cursor-pointer
                          first:rounded-t last:rounded-b flex  space-x-2 items-center rtl:space-x-reverse `}
-                      >
-                        <span className="text-base">
-                          <Icon icon={item.icon} />
-                        </span>
-                        <span>{item.name}</span>
-                      </div>
-                    )
-                )}
+                  >
+                    <span className="text-base">
+                      <Icon icon={item.icon} />
+                    </span>
+                    <span>{item.name}</span>
+                  </div>
+                ))}
               </div>
             </Dropdown>
           </div>
@@ -287,8 +246,6 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
     params.page = page;
     params.itemsPerPage = itemsPerPage;
     params.sortDesc = "desc";
-    params.type = "internal";
-    params.invoice_type = "S";
     params.query = clearSearch ? "" : globalSearch;
     let query = Object.keys(params)
       .map((key) => {
@@ -304,26 +261,25 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
     dispatch(ON_LOADING(true));
 
     await getInvoices(query).then((invoices) => {
-      console.log(invoices);
       dispatch(ON_LOADING(false));
       invoices && dispatch(setInvoices(invoices));
     });
   };
 
-  // const searchRequest = async (state) => {
-  //   dispatch(setCurrentPage(1));
-  //   const query = handleParams(1, state);
-  //   dispatch(removeInvoicesError());
-  //   dispatch(ON_LOADING(true));
-  //   await getInvoices(query).then((invoices) => {
-  //     dispatch(ON_LOADING(false));
-  //     invoices && dispatch(setInvoices(invoices));
-  //   });
-  // };
+  const searchRequest = async (state) => {
+    dispatch(setCurrentPage(1));
+    const query = handleParams(1, state);
+    dispatch(removeInvoicesError());
+    dispatch(ON_LOADING(true));
+    await getInvoices(query).then((invoices) => {
+      dispatch(ON_LOADING(false));
+      invoices && dispatch(setInvoices(invoices));
+    });
+  };
 
-  // const handlePaginationChange = (page) => {
-  //   fetchInvoices(handleParams(page));
-  // };
+  const handlePaginationChange = (page) => {
+    fetchInvoices(handleParams(page));
+  };
 
   // const deleteConfirmAll = (value) => {
   //   const text = '{"cell":{"row":{"values":{"name":"Delete All"}}}}';
@@ -397,7 +353,7 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
         </h4>
       </Confirmation> */}
 
-      {/* {isLoading && <Loader />}
+      {/* {isLoading && <Loader />} */}
       <Card>
         {invoices?.data && (
           <InvoiceTable
@@ -407,11 +363,11 @@ const InvoiceList = ({ title = "Manage Invoices" }) => {
             handlePaginationChange={handlePaginationChange}
             setModalName={setModalName}
             setSelectedInvoices={setSelectedInvoices}
-            deleteConfirmAll={deleteConfirmAll}
+            // deleteConfirmAll={deleteConfirmAll}
             searchRequest={searchRequest}
           />
         )}
-      </Card> */}
+      </Card>
     </>
   );
 };

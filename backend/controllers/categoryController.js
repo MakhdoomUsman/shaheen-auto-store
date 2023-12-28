@@ -1,5 +1,7 @@
 // controllers/categoryController.js
 const Category = require("../models/Category");
+const categoryModel = require("../models/handleModels/categoryModel");
+const utils = require("../utils/utils");
 
 // Create a new category
 const createCategory = async (req, res) => {
@@ -38,10 +40,34 @@ const updateCategory = async (req, res) => {
 // Get all categories
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
-    res.json(categories);
+    // console.log(req.query.page);
+    // Fetch all products
+
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 12;
+    const sortDesc = req.query.sortDesc === "desc"; // Convert to boolean
+    const query = req.query.query || "";
+
+    const skip = (page - 1) * itemsPerPage;
+
+    const paginatedRecords = await categoryModel.getPaginatedData(
+      itemsPerPage,
+      skip,
+      sortDesc,
+      query
+    );
+    req.total = await categoryModel.getTotalRecords(query);
+
+    const response = utils.generateResponse(
+      "SUCCESS",
+      200,
+      "Products List!",
+      paginatedRecords,
+      req
+    );
+    res.json(response);
   } catch (error) {
-    console.error(error);
+    console.error("Error in getVehicles:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

@@ -597,8 +597,8 @@ const InvoiceAddPage = () => {
       <Card
         title={
           location.pathname.split("/")[1] === "invoice-edit"
-            ? "Edit invoice"
-            : "Create new invoice"
+            ? "Edit Product"
+            : "Add new Product"
         }
       >
         {location.pathname.split("/")[1] === "invoice-edit" ? (
@@ -1075,7 +1075,7 @@ const InvoiceAddPage = () => {
                             : "Generate Invoice"
                         }
                         className="btn-success"
-                        
+
                         // onClick={() => console.log("data updates")}
                       />
                     </div>

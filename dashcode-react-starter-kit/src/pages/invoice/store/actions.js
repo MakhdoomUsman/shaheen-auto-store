@@ -1,12 +1,12 @@
 import { toast } from "react-toastify";
 import ApiService from "../../../store/services/api.service";
 
-export const getInvoices = () => {
-  const data = ApiService.get("api/products/get-all-product")
+export const getInvoices = (payload) => {
+  ApiService.setHeader();
+  const data = ApiService.get("api/products/get-all-product?" + payload)
     .then(function (result) {
-      console.log("result");
-      if (result?.data) {
-        return result?.data;
+      if (result?.data?._metadata?.outcomeCode === 200) {
+        return result?.data?.records;
       } else {
         return null;
       }

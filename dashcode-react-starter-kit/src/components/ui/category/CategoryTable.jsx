@@ -3,7 +3,7 @@ import {
   setItemsPerPage,
   setCurrentPage,
   setGlobalSearch,
-} from "@/pages/invoice/store/store";
+} from "@/pages/users/store/store";
 import {
   useTable,
   useRowSelect,
@@ -11,31 +11,29 @@ import {
   useGlobalFilter,
   usePagination,
 } from "react-table";
-import { useLocation, useNavigate } from "react-router-dom";
-import GlobalFilter from "@/pages/invoice/invoice/GlobalFilter";
+import GlobalFilter from "@/pages/users/user/GlobalFilter";
 import Pagination from "@/components/ui/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@/components/ui/Button";
 import CryptoJS from "crypto-js";
 
-const InvoiceTable = ({
+const CategoryTable = ({
   title,
   columns,
-  invoiceData,
+  userData,
   handlePaginationChange,
+  setIsEditModal,
   setModalName,
-  setSelectedInvoices,
+  setEditRow,
+  setSelectedUsers,
   // deleteConfirmAll,
   searchRequest,
+  resetUser,
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { globalSearch } = useSelector((state) => state.invoices);
-  const { itemsPerPage } = useSelector((state) => state.invoices);
-  const { currentPage } = useSelector((state) => state.invoices);
-  const [totalPages, setTotalPages] = useState(
-    invoiceData.total / itemsPerPage
-  );
+  const { globalSearch } = useSelector((state) => state.brands);
+  const { itemsPerPage } = useSelector((state) => state.brands);
+  const { currentPage } = useSelector((state) => state.brands);
+  const [totalPages, setTotalPages] = useState(userData.total / itemsPerPage);
   const [globalFilterInput, setGlobalFilterInput] = useState("");
   const [deleteAllOption, setDeleteAllOption] = useState("");
 
@@ -43,7 +41,7 @@ const InvoiceTable = ({
 
   useEffect(() => {
     setPageSize(itemsPerPage);
-    setTotalPages(invoiceData.total / itemsPerPage);
+    setTotalPages(userData.total / itemsPerPage);
   }, [itemsPerPage]);
 
   const handlePageChange = (page) => {
@@ -57,21 +55,21 @@ const InvoiceTable = ({
   const clearSearch = () => {
     setGlobalFilterInput("");
     dispatch(setGlobalSearch(""));
-    // console.log("globalSearch" + globalSearch);
+    console.log("globalSearch" + globalSearch);
     searchRequest(true);
   };
   useEffect(() => {
     dispatch(setGlobalSearch(globalFilterInput));
-    if (invoiceData.total > itemsPerPage) {
-      setTotalPages(invoiceData.total / itemsPerPage);
+    if (userData.total > itemsPerPage) {
+      setTotalPages(userData.total / itemsPerPage);
     } else {
       setTotalPages(1);
     }
   }, [searchRequestButton]);
 
-  // const deleteAllInvoice = (event) => {
-  //   deleteConfirmAll(event.target.value);
-  // };
+  const deleteAllUser = (event) => {
+    // deleteConfirmAll(event.target.value);
+  };
 
   const IndeterminateCheckbox = React.forwardRef(
     ({ indeterminate, ...rest }, ref) => {
@@ -98,7 +96,7 @@ const InvoiceTable = ({
   const tableInstance = useTable(
     {
       columns,
-      data: invoiceData?.data,
+      data: userData?.data,
     },
     useGlobalFilter,
     useSortBy,
@@ -153,24 +151,24 @@ const InvoiceTable = ({
     var selectedId = selectedFlatRows.map(function (items, index) {
       return items["values"]["uuid"];
     });
-    setSelectedInvoices(selectedId);
+    setSelectedUsers(selectedId);
   }, [selectedFlatRows]);
   const { globalFilter, pageSize } = state;
   return (
     <div>
       <div className="md:flex justify-between items-center mb-6">
         <h4 className="card-title">
-          {title} ({invoiceData.total})
+          {title} ({userData.total})
         </h4>
-        {location?.pathname !== "/orders" && (
-          <div className="flex items-center gap-3">
-            <Button
-              text="+ Add Invoice"
-              className="btn-dark btn-sm"
-              onClick={() => navigate("/invoice-add")}
-            />
-          </div>
-        )}
+        <div className="flex items-center gap-3">
+          <Button
+            text="+ Add User"
+            className="btn-dark btn-sm"
+            onClick={() => (
+              setModalName("add"), setIsEditModal((prev) => !prev), resetUser()
+            )}
+          />
+        </div>
       </div>
 
       <div className="md:flex justify-between flex-row-reverse mb-6">
@@ -193,7 +191,7 @@ const InvoiceTable = ({
       </div>
       <div className="overflow-x-auto -mx-6">
         <div className="inline-block min-w-full align-middle">
-          <div className="overflow-y-auto ">
+          <div className="overflow-y-auto">
             <table
               className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700"
               {...getTableProps}
@@ -226,7 +224,6 @@ const InvoiceTable = ({
                 className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700"
                 {...getTableBodyProps}
               >
-                {/* // <tr {...row.getRowProps()} className="cursor-pointer" onClick={() => navigate("/invoice-preview/" + row.original.uuid)}> */}
                 {page?.length > 0 ? (
                   page?.map((row) => {
                     prepareRow(row);
@@ -268,14 +265,14 @@ const InvoiceTable = ({
           <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
             Page{" "}
             <span>
-              {currentPage} of {invoiceData?.last_page}
+              {currentPage} of {userData?.last_page}
             </span>
             <span>
               {Object.keys(selectedRowIds).length > 0 && (
                 <select
                   value={deleteAllOption}
                   className="form-control py-2 w-max !inline ml-4"
-                  onChange={(e) => deleteAllInvoice(e)}
+                  onChange={(e) => deleteAllUser(e)}
                 >
                   <option value="">--Select--</option>
                   <option value="deleted">Delete All</option>
@@ -293,4 +290,4 @@ const InvoiceTable = ({
   );
 };
 
-export default InvoiceTable;
+export default CategoryTable;

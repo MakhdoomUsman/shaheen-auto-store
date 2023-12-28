@@ -76,21 +76,44 @@ const ApiService = {
    * @returns {*}
    */
   get(resource, slug = "") {
-    return new Promise(function (resolve, reject) {
-      axios
-        .get(`${resource}/${slug}`)
-        .then((data) => {
-          if (data.data) {
-            console.log("worrk", data?.data);
-            //useDispatch(LOGOUT);
-            return false;
-          }
-          resolve(data);
-        })
-        .catch(function (error) {
-          throw new Error(`${error}`);
-        });
-    });
+    if (
+      resource !== "api/auth/verify" &&
+      resource !== "api/rolessimple" &&
+      resource !== "api/categoriessimple"
+    ) {
+      // useDispatch(ADD_BODY_CLASSNAME, "page-loading");
+    }
+    if (slug !== "") {
+      return new Promise(function (resolve, reject) {
+        axios
+          .get(`${resource}/${slug}`)
+          .then((data) => {
+            if (data.data._metadata.outcomeCode === 400) {
+              //useDispatch(LOGOUT);
+              return false;
+            }
+            resolve(data);
+          })
+          .catch(function (error) {
+            throw new Error(`${error}`);
+          });
+      });
+    } else {
+      return new Promise(function (resolve, reject) {
+        axios
+          .get(`${resource}`)
+          .then((data) => {
+            if (data.data._metadata.outcomeCode === 400) {
+              //useDispatch(LOGOUT);
+              return false;
+            }
+            resolve(data);
+          })
+          .catch(function (error) {
+            throw new Error(`${error}`);
+          });
+      });
+    }
   },
 
   /**

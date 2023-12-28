@@ -16,6 +16,8 @@ const InvoicePreviewPage = lazy(() =>
   import("./pages/invoice/invoice-preview")
 );
 const InvoiceAddPage = lazy(() => import("./pages/invoice/invoice-add"));
+const ManageUsers = lazy(() => import("./pages/users/index"));
+const ManageCategory = lazy(() => import("./pages/category/index"));
 import Layout from "./layout/Layout";
 import jwtService from "./store/services/jwt.service";
 const useLocationChange = (action) => {
@@ -61,6 +63,30 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <InvoiceAddPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="invoice-add"
+            element={
+              <Suspense fallback={<Loading />}>
+                <InvoiceAddPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="users"
+            element={
+              <Suspense fallback={<Loading />}>
+                <ManageUsers />
+              </Suspense>
+            }
+          />
+          <Route
+            path="category"
+            element={
+              <Suspense fallback={<Loading />}>
+                <ManageCategory />
               </Suspense>
             }
           />
