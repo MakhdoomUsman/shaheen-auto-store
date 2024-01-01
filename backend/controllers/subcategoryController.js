@@ -1,5 +1,7 @@
 // controllers/subcategoryController.js
 const SubCategory = require("../models/SubCategory");
+const SubCategoryModel = require("../models/handleModels/SubCategoryModel");
+const utils = require("../utils/utils");
 
 // Create a new subcategory
 const createSubCategory = async (req, res) => {
@@ -38,10 +40,34 @@ const updateSubCategory = async (req, res) => {
 // Get all subcategories
 const getAllSubCategories = async (req, res) => {
   try {
-    const subcategories = await SubCategory.find();
-    res.json(subcategories);
+    // console.log(req.query.page);
+    // Fetch all products
+
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.itemsPerPage) || 12;
+    const sortDesc = req.query.sortDesc === "desc"; // Convert to boolean
+    const query = req.query.query || "";
+
+    const skip = (page - 1) * itemsPerPage;
+
+    const paginatedRecords = await SubCategoryModel.getPaginatedData(
+      itemsPerPage,
+      skip,
+      sortDesc,
+      query
+    );
+    req.total = await SubCategoryModel.getTotalRecords(query);
+
+    const response = utils.generateResponse(
+      "SUCCESS",
+      200,
+      "SubCategory List!",
+      paginatedRecords,
+      req
+    );
+    res.json(response);
   } catch (error) {
-    console.error(error);
+    console.error("Error in Gel all Subcategory:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -53,13 +79,13 @@ const getSubcategoryById = async (req, res) => {
     const subcategory = await SubCategory.findById(subcategoryId);
 
     if (!subcategory) {
-      return res.status(404).json({ error: 'Subcategory not found' });
+      return res.status(404).json({ error: "Subcategory not found" });
     }
 
     res.status(200).json(subcategory);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

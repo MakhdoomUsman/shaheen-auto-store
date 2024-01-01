@@ -17,6 +17,7 @@ const InvoicePreviewPage = lazy(() =>
 );
 const InvoiceAddPage = lazy(() => import("./pages/invoice/invoice-add"));
 const ManageUsers = lazy(() => import("./pages/users/index"));
+const ManageSubCategory = lazy(() => import("./pages/SubCategory/index"));
 const ManageCategory = lazy(() => import("./pages/category/index"));
 import Layout from "./layout/Layout";
 import jwtService from "./store/services/jwt.service";
@@ -87,6 +88,14 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <ManageCategory />
+              </Suspense>
+            }
+          />
+          <Route
+            path="sub-category"
+            element={
+              <Suspense fallback={<Loading />}>
+                <ManageSubCategory />
               </Suspense>
             }
           />

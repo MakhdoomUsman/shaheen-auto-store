@@ -61,7 +61,7 @@ const getAllCategories = async (req, res) => {
     const response = utils.generateResponse(
       "SUCCESS",
       200,
-      "Products List!",
+      "Category List!",
       paginatedRecords,
       req
     );

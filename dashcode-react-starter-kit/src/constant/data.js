@@ -29,6 +29,11 @@ export const menuItems = [
     icon: "icon-park-outline:sales-report",
     link: "category",
   },
+  {
+    title: "Sub Category",
+    icon: "icon-park-outline:sales-report",
+    link: "sub-category",
+  },
 ];
 
 export const topMenu = [
