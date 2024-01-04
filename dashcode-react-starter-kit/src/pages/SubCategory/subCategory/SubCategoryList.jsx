@@ -239,10 +239,10 @@ const SubCategoryList = ({ title = "Manage Sub-Category" }) => {
   // };
 
   const editRecord = async (row) => {
-    // await getRoleListsForSubCategory().then((rolesList) => {
-    //   dispatch(ON_LOADING(false));
-    //   setRolesList(rolesList);
-    // });
+    await getSubCategory().then((rolesList) => {
+      dispatch(ON_LOADING(false));
+      setRolesList(rolesList);
+    });
     await getSubCategory(row.uuid).then((subCategory) => {
       dispatch(ON_LOADING(false));
       //setSelectedSubCategory(subCategory);

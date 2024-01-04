@@ -166,56 +166,25 @@ const EditModel = ({
       {isLoading && <Loader position="absolute" />}
       <div className="flex flex-col gap-2 text-base text-slate-600 dark:text-slate-300">
         <Textinput
-          label="Name"
+          label="SubCategory Name"
           type="text"
           inputName="name"
           defaultValue={subCategory?.name}
           onChange={handleInputs}
-          placeholder="Type your name"
+          placeholder="Type your subCategory Name"
           error={errors.name}
           onKeyUp={validateForm}
         />
         <Textinput
-          label="Email"
+          label="SubCategory Email"
           type="email"
           inputName="email"
           defaultValue={subCategory?.email}
           onChange={handleInputs}
-          placeholder="Type your email"
+          placeholder="Type your subCategory email"
           error={errors.email}
           onKeyUp={validateForm}
         />
-        {/* <Textinput
-          label="Phone"
-          type="text"
-          inputName="phone"
-          defaultValue={subCategory?.phone}
-          onChange={handleInputs}
-          placeholder="Enter your phone number"
-          error={errors.phone}
-          onKeyUp={validateForm}
-        /> */}
-        <InputPhone
-          label="Phone"
-          countryCallingCodeEditable={false}
-          defaultCountry="AE"
-          onChange={(e) => setSubCategory((prev) => ({ ...prev, ["phone"]: e }))}
-          phone={subCategory?.phone}
-          control={false}
-          error={errors.phone}
-        />
-        {modalName === "add" && (
-          <Textinput
-            label="Password"
-            type="password"
-            inputName="password"
-            defaultValue={subCategory?.password}
-            onChange={handleInputs}
-            placeholder="Enter your account password"
-            error={errors.password}
-            onKeyUp={validateForm}
-          />
-        )}
         <label className="form-label" htmlFor="mul_1">
           Role
         </label>
