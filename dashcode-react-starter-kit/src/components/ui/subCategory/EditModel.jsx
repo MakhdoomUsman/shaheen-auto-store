@@ -11,31 +11,31 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const EditModel = ({
-  user,
-  setUser,
+  subCategory,
+  setSubCategory,
   isEditModal,
   setIsEditModal,
-  updateUserDetails,
+  updateSubCategoryDetails,
   modalName,
-  addUser,
+  addSubCategory,
   deleteConfrim,
   rolesList,
 }) => {
   useEffect(() => {
     if (modalName === "add") {
-      (user.password = ""), resetUser();
+      (subCategory.password = ""), resetSubCategory();
     } else {
-      delete user.password;
+      delete subCategory.password;
     }
-    // console.log("user detail => ", user);
+    // console.log("subCategory detail => ", subCategory);
   }, []);
   const navigate = useNavigate();
   const handleInputs = (e) => {
-    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setSubCategory((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const handleSelect = (e) => {
     console.log("slect value", e);
-    setUser((prev) => ({ ...prev, ["role_id"]: e.value }));
+    setSubCategory((prev) => ({ ...prev, ["role_id"]: e.value }));
   };
   const [errors, setErrors] = useState({});
   const { isLoading } = useSelector((state) => state.loader);
@@ -43,52 +43,52 @@ const EditModel = ({
   const validateForm = () => {
     const error = {};
     let valid = true;
-    const userName = /[a-zA-Z\s]{3,}/;
+    const subCategoryName = /[a-zA-Z\s]{3,}/;
     const password = /^[^\s]{8,}$/;
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const phoneNumberPattern =
       /^(?:\+?\d{1,3})?[ -]?\(?(?:\d{2,3})\)?[ -]?\d{3}[ -]?\d{4}$/;
 
-    if (!user?.name) {
-      error.name = "User name is required";
+    if (!subCategory?.name) {
+      error.name = "SubCategory name is required";
       valid = false;
-    } else if (!userName.test(user?.name)) {
+    } else if (!subCategoryName.test(subCategory?.name)) {
       error.name = "Name should be minimum 3 letters";
       valid = false;
     }
     if (modalName === "add") {
-      if (!user?.password) {
+      if (!subCategory?.password) {
         error.password = "Password is required";
         valid = false;
-      } else if (!password.test(user?.password)) {
+      } else if (!password.test(subCategory?.password)) {
         error.password = "Password must be minimum 8 letters without spaces";
         valid = false;
       }
     }
-    if (!user?.phone) {
+    if (!subCategory?.phone) {
       error.phone = "Phone is required";
       valid = false;
-    } else if (!phoneNumberPattern.test(user?.phone)) {
+    } else if (!phoneNumberPattern.test(subCategory?.phone)) {
       error.phone = "Phone is Invalid";
       valid = false;
     }
-    if (!user?.email) {
+    if (!subCategory?.email) {
       error.email = "Email is required";
       valid = false;
-    } else if (!regex.test(user?.email)) {
+    } else if (!regex.test(subCategory?.email)) {
       error.email = "Email is invalid";
       valid = false;
     }
-    if (!user?.role_id) {
-      error.role_id = "User role is required";
+    if (!subCategory?.role_id) {
+      error.role_id = "SubCategory role is required";
       valid = false;
     }
 
     setErrors(error);
     return valid;
   };
-  const resetUser = () => {
-    setUser({
+  const resetSubCategory = () => {
+    setSubCategory({
       name: "",
       email: "",
       phone: "",
@@ -118,7 +118,7 @@ const EditModel = ({
   console.log();
   return (
     <Modal
-      title={`${modalName} User`}
+      title={`${modalName} SubCategory`}
       showModal={isEditModal}
       setShowModal={setIsEditModal}
       uncontrol
@@ -139,7 +139,7 @@ const EditModel = ({
               onClick={
                 () => {
                   if (validateForm()) {
-                    updateUserDetails();
+                    updateSubCategoryDetails();
                   }
                 }
                 // setIsEditModal(!isEditModal),
@@ -153,7 +153,7 @@ const EditModel = ({
               onClick={
                 () => {
                   if (validateForm()) {
-                    addUser();
+                    addSubCategory();
                   }
                 }
                 // setIsEditModal(!isEditModal),
@@ -169,7 +169,7 @@ const EditModel = ({
           label="Name"
           type="text"
           inputName="name"
-          defaultValue={user?.name}
+          defaultValue={subCategory?.name}
           onChange={handleInputs}
           placeholder="Type your name"
           error={errors.name}
@@ -179,7 +179,7 @@ const EditModel = ({
           label="Email"
           type="email"
           inputName="email"
-          defaultValue={user?.email}
+          defaultValue={subCategory?.email}
           onChange={handleInputs}
           placeholder="Type your email"
           error={errors.email}
@@ -189,7 +189,7 @@ const EditModel = ({
           label="Phone"
           type="text"
           inputName="phone"
-          defaultValue={user?.phone}
+          defaultValue={subCategory?.phone}
           onChange={handleInputs}
           placeholder="Enter your phone number"
           error={errors.phone}
@@ -199,8 +199,8 @@ const EditModel = ({
           label="Phone"
           countryCallingCodeEditable={false}
           defaultCountry="AE"
-          onChange={(e) => setUser((prev) => ({ ...prev, ["phone"]: e }))}
-          phone={user?.phone}
+          onChange={(e) => setSubCategory((prev) => ({ ...prev, ["phone"]: e }))}
+          phone={subCategory?.phone}
           control={false}
           error={errors.phone}
         />
@@ -209,7 +209,7 @@ const EditModel = ({
             label="Password"
             type="password"
             inputName="password"
-            defaultValue={user?.password}
+            defaultValue={subCategory?.password}
             onChange={handleInputs}
             placeholder="Enter your account password"
             error={errors.password}
@@ -224,7 +224,7 @@ const EditModel = ({
             <Select
               isClearable={false}
               defaultValue={rolesList.map((data) => {
-                return data.value === user?.role_id ? data : null;
+                return data.value === subCategory?.role_id ? data : null;
               })}
               styles={styles}
               // closeMenuOnSelect={false}
@@ -250,9 +250,9 @@ const EditModel = ({
         <div className="flex items-center gap-x-6 my-3">
           <Switch
             label="Is Verified"
-            value={user?.is_verified}
+            value={subCategory?.is_verified}
             onChange={() =>
-              setUser((prev) => ({
+              setSubCategory((prev) => ({
                 ...prev,
                 is_verified: prev.is_verified === 1 ? 0 : 1,
               }))
@@ -260,9 +260,9 @@ const EditModel = ({
           />
           <Switch
             label="Status"
-            value={user?.status}
+            value={subCategory?.status}
             onChange={() =>
-              setUser((prev) => ({
+              setSubCategory((prev) => ({
                 ...prev,
                 status: prev.status === 1 ? 0 : 1,
               }))

@@ -8,7 +8,7 @@ import ProfileImage from "@/assets/images/users/user-1.jpg";
 // import Switch from '../Switch';
 // import Select, { components } from "react-select";
 
-const ViewUser = ({ singleUser, veiwUserData, setVeiwUserData }) => {
+const ViewSubCategory = ({ singleUser, veiwUserData, setVeiwUserData }) => {
   return (
     <Modal
       title={`User Detials`}
@@ -135,4 +135,4 @@ const ViewUser = ({ singleUser, veiwUserData, setVeiwUserData }) => {
   );
 };
 
-export default ViewUser;
+export default ViewSubCategory;

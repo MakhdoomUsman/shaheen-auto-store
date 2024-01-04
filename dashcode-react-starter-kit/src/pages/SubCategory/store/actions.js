@@ -20,9 +20,9 @@ export const getSubCategory = (payload) => {
 
   return data;
 };
-export const getSingleUser = (payload) => {
+export const getSingleSubCategory = (payload) => {
   ApiService.setHeader();
-  const data = ApiService.get("api/get-user/" + payload)
+  const data = ApiService.get("api/get-subCategory/" + payload)
     .then(function (result) {
       if (result.data._metadata.outcomeCode === 200) {
         return result.data.records;
@@ -39,25 +39,25 @@ export const getSingleUser = (payload) => {
 
   return data;
 };
-export const getUser = (uuid) => {
-  ApiService.setHeader();
-  const data = ApiService.get("api/get-user/" + uuid)
-    .then(function (result) {
-      if (result.data._metadata.outcomeCode === 200) {
-        return result.data.records;
-      } else if (result.data?._metadata?.outcome === "PACKAGE_NOT_ACTIVE") {
-        window.open("/package-expire", "_self");
-      } else {
-        return null;
-      }
-    })
-    .catch(function (error) {
-      console.log("Error: ", error);
-      return error;
-    });
+// export const getSubCategory = (uuid) => {
+//   ApiService.setHeader();
+//   const data = ApiService.get("api/get-subCategory/" + uuid)
+//     .then(function (result) {
+//       if (result.data._metadata.outcomeCode === 200) {
+//         return result.data.records;
+//       } else if (result.data?._metadata?.outcome === "PACKAGE_NOT_ACTIVE") {
+//         window.open("/package-expire", "_self");
+//       } else {
+//         return null;
+//       }
+//     })
+//     .catch(function (error) {
+//       console.log("Error: ", error);
+//       return error;
+//     });
 
-  return data;
-};
+//   return data;
+// };
 export const getPermissionList = () => {
   ApiService.setHeader();
   const data = ApiService.get("api/get-vendor-permissions-list")
@@ -78,9 +78,9 @@ export const getPermissionList = () => {
   return data;
 };
 
-export const addUsers = (row) => {
+export const addSubCategories = (row) => {
   ApiService.setHeader();
-  const data = ApiService.post(`api/create-user`, row)
+  const data = ApiService.post(`api/create-subCategory`, row)
     .then(function (result) {
       if (result.data._metadata.outcome === "SUCCESS") {
         return { resp: true, data: result.data.records };
@@ -98,12 +98,15 @@ export const addUsers = (row) => {
   return data;
 };
 
-export const deleteUsers = (id) => {
+export const deleteSubCategories = (id) => {
   ApiService.setHeader();
-  const data = ApiService.delete("api/delete-selected-users", `uuids=${id}`)
+  const data = ApiService.delete(
+    "api/delete-selected-subCategories",
+    `uuids=${id}`
+  )
     .then(function (result) {
       if (result.data._metadata.outcome === "SUCCESS") {
-        toast.success("User deleted successfully.");
+        toast.success("SubCategory deleted successfully.");
         return { resp: true, data: result.data.records };
       } else if (result.data?._metadata?.outcome === "PACKAGE_NOT_ACTIVE") {
         window.open("/package-expire", "_self");
@@ -119,9 +122,9 @@ export const deleteUsers = (id) => {
   return data;
 };
 
-export const updateUsers = (row) => {
+export const updateSubCategories = (row) => {
   ApiService.setHeader();
-  const data = ApiService.post(`api/update-user/${row.uuid}`, row)
+  const data = ApiService.post(`api/update-subCategory/${row.uuid}`, row)
     .then(function (result) {
       if (result.data._metadata.outcome === "SUCCESS") {
         return { resp: true, data: result.data.records };

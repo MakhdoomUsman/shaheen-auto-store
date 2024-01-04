@@ -1,24 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import ApiService from "@/store/services/api.service";
 import axios from "axios";
-// save users in local storage
+// save subCategories in local storage
 
 export const categorySlice = createSlice({
-  name: "category",
+  name: "subCategory",
   initialState: {
     errorsList: null,
-    users: null,
-    singleUser: null,
+    subCategories: null,
+    singleSubCategory: null,
     itemsPerPage: 25,
     currentPage: 1,
     globalSearch: "",
   },
   reducers: {
-    setUsers: (state, action) => {
-      state.users = action.payload;
+    setSubCategories: (state, action) => {
+      state.subCategories = action.payload;
     },
-    setSingleUser: (state, action) => {
-      state.singleUser = action.payload;
+    setSingleSubCategory: (state, action) => {
+      state.singleSubCategory = action.payload;
     },
     setItemsPerPage: (state, action) => {
       state.itemsPerPage = action.payload;
@@ -26,27 +26,27 @@ export const categorySlice = createSlice({
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
     },
-    setUsersErrors: (state, error) => {
+    setSubCategoriesErrors: (state, error) => {
       state.errorsList = error.payload;
     },
     setGlobalSearch: (state, error) => {
       state.globalSearch = error.payload;
     },
-    removeUsersError: (state) => {
+    removeSubCategoriesError: (state) => {
       state.errorsList = {};
     },
   },
 });
 
 export const {
-  updateUser,
-  removeUsersError,
-  setUsersErrors,
-  setUsers,
-  setSingleUser,
+  updateSubCategory,
+  removeSubCategoriesError,
+  setSubCategoriesErrors,
+  setSubCategories,
+  setSingleSubCategory,
   setItemsPerPage,
   setCurrentPage,
-  getUsers,
+  getSubCategories,
   setGlobalSearch,
 } = categorySlice.actions;
 export default categorySlice.reducer;

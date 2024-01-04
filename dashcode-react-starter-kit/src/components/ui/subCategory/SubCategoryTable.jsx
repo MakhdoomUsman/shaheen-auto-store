@@ -3,7 +3,7 @@ import {
   setItemsPerPage,
   setCurrentPage,
   setGlobalSearch,
-} from "@/pages/users/store/store";
+} from "@/pages/SubCategory/store/store";
 import {
   useTable,
   useRowSelect,
@@ -11,7 +11,7 @@ import {
   useGlobalFilter,
   usePagination,
 } from "react-table";
-import GlobalFilter from "@/pages/SubCategory/user/GlobalFilter";
+import GlobalFilter from "@/pages/SubCategory/subCategory/GlobalFilter";
 import Pagination from "@/components/ui/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@/components/ui/Button";
@@ -25,15 +25,17 @@ const SubCategoryTable = ({
   setIsEditModal,
   setModalName,
   setEditRow,
-  setSelectedUsers,
+  setSelectedSubCategories,
   // deleteConfirmAll,
   searchRequest,
-  resetUser,
+  resetSubCategory,
 }) => {
-  const { globalSearch } = useSelector((state) => state.brands);
-  const { itemsPerPage } = useSelector((state) => state.brands);
-  const { currentPage } = useSelector((state) => state.brands);
-  const [totalPages, setTotalPages] = useState(subCategoryData.total / itemsPerPage);
+  const { globalSearch } = useSelector((state) => state.subCategory);
+  const { itemsPerPage } = useSelector((state) => state.subCategory);
+  const { currentPage } = useSelector((state) => state.subCategory);
+  const [totalPages, setTotalPages] = useState(
+    subCategoryData.total / itemsPerPage
+  );
   const [globalFilterInput, setGlobalFilterInput] = useState("");
   const [deleteAllOption, setDeleteAllOption] = useState("");
 
@@ -67,7 +69,7 @@ const SubCategoryTable = ({
     }
   }, [searchRequestButton]);
 
-  const deleteAllUser = (event) => {
+  const deleteAllSubCategory = (event) => {
     // deleteConfirmAll(event.target.value);
   };
 
@@ -151,7 +153,7 @@ const SubCategoryTable = ({
     var selectedId = selectedFlatRows.map(function (items, index) {
       return items["values"]["uuid"];
     });
-    setSelectedUsers(selectedId);
+    setSelectedSubCategories(selectedId);
   }, [selectedFlatRows]);
   const { globalFilter, pageSize } = state;
   return (
@@ -162,10 +164,12 @@ const SubCategoryTable = ({
         </h4>
         <div className="flex items-center gap-3">
           <Button
-            text="+ Add User"
+            text="+ Add SubCategory"
             className="btn-dark btn-sm"
             onClick={() => (
-              setModalName("add"), setIsEditModal((prev) => !prev), resetUser()
+              setModalName("add"),
+              setIsEditModal((prev) => !prev),
+              resetSubCategory()
             )}
           />
         </div>
@@ -272,7 +276,7 @@ const SubCategoryTable = ({
                 <select
                   value={deleteAllOption}
                   className="form-control py-2 w-max !inline ml-4"
-                  onChange={(e) => deleteAllUser(e)}
+                  onChange={(e) => deleteAllSubCategory(e)}
                 >
                   <option value="">--Select--</option>
                   <option value="deleted">Delete All</option>
