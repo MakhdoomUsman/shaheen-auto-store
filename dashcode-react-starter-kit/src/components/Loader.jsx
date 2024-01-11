@@ -5,7 +5,6 @@ import Logo from "@/assets/images/logo/logo.svg";
 import { useSelector } from "react-redux";
 const Loader = ({ position = "fixed", loading = "Loading...", bgwhite = 50 }) => {
   const [isDark] = useDarkMode();
-  const { isAuth } = useSelector((state) => state.auth);
   console.log(bgwhite);
   return (
     <div
@@ -13,8 +12,7 @@ const Loader = ({ position = "fixed", loading = "Loading...", bgwhite = 50 }) =>
         } top-0 left-0 bg-white/${bgwhite} backdrop-filter backdrop-blur z-30 w-full flex flex-col justify-center items-center `}
     >
       <svg
-        className={`animate-spin ltr:-ml-1 ltr:mr-3 rtl:-mr-1 rtl:ml-3 ${isAuth ? "h-6 w-6" : "h-12 w-12"
-          } `}
+        className={`animate-spin ltr:-ml-1 ltr:mr-3 rtl:-mr-1 rtl:ml-3 h-6 w-6`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

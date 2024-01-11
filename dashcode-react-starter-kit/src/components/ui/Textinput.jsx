@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "@/components/ui/Icon";
 import Cleave from "cleave.js/react";
 import "cleave.js/dist/addons/cleave-phone.us";
+import Button from "./Button";
 const Textinput = ({
   type,
   label,
@@ -20,6 +21,7 @@ const Textinput = ({
   horizontal,
   validate,
   isMask,
+  autoComplete,
   msgTooltip,
   description,
   hasicon,
@@ -27,14 +29,27 @@ const Textinput = ({
   options,
   onFocus,
   defaultValue,
-
+  inputName,
+  onKeyUp,
+  controlInput,
+  onAdd,
+  onClose,
+  isLoading,
   ...rest
 }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(!open);
   };
-
+  // useEffect(() => {
+  //   document.getElementById('global-search').addEventListener('keydown', function (e) {
+  //     if (e.keyCode === 13) {
+  //       e.preventDefault(); // Prevent form submission on Enter keypress
+  //     }
+  //   });
+  // }, [])
+  
+ 
   return (
     <div
       className={`fromGroup  ${error ? "has-error" : ""}  ${
@@ -54,6 +69,7 @@ const Textinput = ({
       <div className={`relative ${horizontal ? "flex-1" : ""}`}>
         {name && !isMask && (
           <input
+            name={inputName}
             type={type === "password" && open === true ? "text" : type}
             {...register(name)}
             {...rest}
@@ -63,20 +79,25 @@ const Textinput = ({
             placeholder={placeholder}
             readOnly={readonly}
             defaultValue={defaultValue}
+            // value={defaultValue}
+            autoComplete={autoComplete}
             disabled={disabled}
+            onKeyUp={onKeyUp}
             id={id}
-            onChange={onChange}
           />
         )}
         {!name && !isMask && (
           <input
+            name={inputName}
             type={type === "password" && open === true ? "text" : type}
             className={`form-control py-2 ${className}`}
             placeholder={placeholder}
             readOnly={readonly}
             disabled={disabled}
-            defaultValue={defaultValue}
+            value={defaultValue}
             onChange={onChange}
+            autoComplete="off"
+            onKeyUp={onKeyUp}
             id={id}
           />
         )}
@@ -93,6 +114,7 @@ const Textinput = ({
             id={id}
             readOnly={readonly}
             disabled={disabled}
+            autoComplete={autoComplete}
             onChange={onChange}
           />
         )}
@@ -107,6 +129,7 @@ const Textinput = ({
             id={id}
             readOnly={readonly}
             disabled={disabled}
+            autoComplete={autoComplete}
             onChange={onChange}
           />
         )}
@@ -147,7 +170,8 @@ const Textinput = ({
               : " text-danger-500 block text-sm"
           }`}
         >
-          {error.message}
+          {error[0] && error}
+          {error?.message && error?.message}
         </div>
       )}
       {/* validated and success message*/}
@@ -164,6 +188,22 @@ const Textinput = ({
       )}
       {/* only description */}
       {description && <span className="input-description">{description}</span>}
+      {controlInput && (
+        <div className="flex gap-1 justify-end pt-2.5">
+          <Button
+            text="Close"
+            className=" btn-light px-2.5 py-1 text-xs rounded-xl"
+            onClick={onClose}
+            isLoading={isLoading}
+          />
+          <Button
+            text="Add"
+            className=" btn-danger px-2.5 py-1 text-xs rounded-xl"
+            onClick={onAdd}
+            isLoading={isLoading}
+          />
+        </div>
+      )}
     </div>
   );
 };

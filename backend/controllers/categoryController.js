@@ -2,6 +2,7 @@
 const Category = require("../models/Category");
 const categoryModel = require("../models/handleModels/categoryModel");
 const utils = require("../utils/utils");
+const utilsWithoutPagination = require("../utils/utilsWithoutPagination");
 
 // Create a new category
 const createCategory = async (req, res) => {
@@ -72,6 +73,28 @@ const getAllCategories = async (req, res) => {
   }
 };
 
+// get all category list
+const getAllCategoryNames = async (req, res) => {
+  try {
+    // Fetch all categories
+    const allCategories = await Category.find({}, "_id category_name");
+    const mappedCategories = allCategories.map(({ _id, category_name }) => ({
+      label: category_name,
+      value: _id,
+    }));
+    const response = utilsWithoutPagination.generateSimpleResponse(
+      "SUCCESS",
+      200,
+      "Category Names List!",
+      mappedCategories
+    );
+    res.json(response);
+  } catch (error) {
+    console.error("Error in getAllCategoryNames:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 // get single category by id
 const getCategoryById = async (req, res) => {
   try {
@@ -111,6 +134,7 @@ module.exports = {
   createCategory,
   updateCategory,
   getCategoryById,
+  getAllCategoryNames,
   getAllCategories,
   deleteCategory,
 };

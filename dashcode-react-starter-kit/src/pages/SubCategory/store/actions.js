@@ -39,27 +39,24 @@ export const getSingleSubCategory = (payload) => {
 
   return data;
 };
-// export const getSubCategory = (uuid) => {
-//   ApiService.setHeader();
-//   const data = ApiService.get("api/get-subCategory/" + uuid)
-//     .then(function (result) {
-//       if (result.data._metadata.outcomeCode === 200) {
-//         return result.data.records;
-//       } else if (result.data?._metadata?.outcome === "PACKAGE_NOT_ACTIVE") {
-//         window.open("/package-expire", "_self");
-//       } else {
-//         return null;
-//       }
-//     })
-//     .catch(function (error) {
-//       console.log("Error: ", error);
-//       return error;
-//     });
-
-//   return data;
-// };
-export const getPermissionList = () => {
+export const getCategory = () => {
   ApiService.setHeader();
+  const data = ApiService.get("api/categories/get-all-category-list")
+    .then(function (result) {
+      if (result.data._metadata.outcomeCode === 200) {
+        return result.data.records;
+      } else {
+        return null;
+      }
+    })
+    .catch(function (error) {
+      console.log("Error: ", error);
+      return error;
+    });
+
+  return data;
+};
+export const getPermissionList = () => {
   const data = ApiService.get("api/get-vendor-permissions-list")
     .then(function (result) {
       if (result.data._metadata.outcomeCode === 200) {
@@ -79,13 +76,10 @@ export const getPermissionList = () => {
 };
 
 export const addSubCategories = (row) => {
-  ApiService.setHeader();
-  const data = ApiService.post(`api/create-subCategory`, row)
+  const data = ApiService.post(`api/subcategories/add-subcategory`, row)
     .then(function (result) {
       if (result.data._metadata.outcome === "SUCCESS") {
         return { resp: true, data: result.data.records };
-      } else if (result.data?._metadata?.outcome === "PACKAGE_NOT_ACTIVE") {
-        window.open("/package-expire", "_self");
       } else {
         return { resp: false, error: result.data.errors[0] };
       }

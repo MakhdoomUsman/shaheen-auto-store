@@ -22,7 +22,12 @@ import {
 } from "@/store/services/common/confirmation.module";
 import EditModel from "@/components/ui/subCategory/EditModel";
 
-import { getSingleSubCategory, getSubCategory } from "../store/actions";
+import {
+  addSubCategories,
+  getCategory,
+  getSingleSubCategory,
+  getSubCategory,
+} from "../store/actions";
 import ViewSubCategory from "@/components/ui/subCategory/ViewSubCategory";
 import CryptoJS from "crypto-js";
 import { toast } from "react-toastify";
@@ -122,17 +127,12 @@ const SubCategoryList = ({ title = "Manage Sub-Category" }) => {
   const [deleteRow, setDeleteRow] = useState(null);
   const [isEditModal, setIsEditModal] = useState(false);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-  const [rolesList, setRolesList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const [veiwSubCategoryData, setVeiwSubCategoryData] = useState(false);
   const [editRow, setEditRow] = useState({
     name: "",
-    email: "",
-    phone: "",
-    is_verified: 0,
-    status: 0,
-    password: "",
-    uuid: "",
-    role_id: null,
+    description: "",
+    category: "",
   });
 
   const dispatch = useDispatch();
@@ -239,24 +239,25 @@ const SubCategoryList = ({ title = "Manage Sub-Category" }) => {
   // };
 
   const editRecord = async (row) => {
-    await getSubCategory().then((rolesList) => {
+    await getCategory().then((categoryList) => {
       dispatch(ON_LOADING(false));
-      setRolesList(rolesList);
+      setCategoryList(categoryList);
     });
-    await getSubCategory(row.uuid).then((subCategory) => {
-      dispatch(ON_LOADING(false));
-      //setSelectedSubCategory(subCategory);
-      setIsEditModal(true);
-      setEditRow((prev) => ({
-        email: subCategory.email,
-        name: subCategory.name,
-        phone: subCategory.phone,
-        is_verified: subCategory.is_verified,
-        status: subCategory.status,
-        uuid: subCategory.uuid,
-        role_id: subCategory.role?.id,
+    row &&
+      (await getSubCategory(row.uuid).then((subCategory) => {
+        dispatch(ON_LOADING(false));
+        //setSelectedSubCategory(subCategory);
+        setIsEditModal(true);
+        setEditRow((prev) => ({
+          email: subCategory.email,
+          name: subCategory.name,
+          phone: subCategory.phone,
+          is_verified: subCategory.is_verified,
+          status: subCategory.status,
+          uuid: subCategory.uuid,
+          category: subCategory.role?.id,
+        }));
       }));
-    });
   };
 
   const updateSubCategoryDetails = async () => {
@@ -280,12 +281,18 @@ const SubCategoryList = ({ title = "Manage Sub-Category" }) => {
   };
 
   const addSubCategory = async () => {
-    delete editRow.uuid;
     dispatch(ON_LOADING(true));
-    dispatch(setdeleteConfrim(true));
-    await addSubCategories(editRow).then((data) => {
+    // dispatch(setdeleteConfrim(true));
+    console.log("Edit record data", editRow);
+    const recordData = {
+      subCategory_name: editRow?.name,
+      subCategory_disc: editRow?.description,
+      category: editRow?.category,
+    };
+
+    await addSubCategories(recordData).then((data) => {
       dispatch(setdeleteConfrim(false));
-      if (data.resp) {
+      if (data) {
         dispatch(ON_LOADING(false));
         toast.success("SubCategory added succesfully!");
         fetchsubCategory(handleParams());
@@ -300,19 +307,14 @@ const SubCategoryList = ({ title = "Manage Sub-Category" }) => {
 
   const resetSubCategory = async () => {
     console.log();
-    // await getRoleListsForSubCategory().then((rolesList) => {
+    // await getRoleListsForSubCategory().then((categoryList) => {
     //   dispatch(ON_LOADING(false));
-    //   setRolesList(rolesList);
+    //   setCategoryList(categoryList);
     // });
     setEditRow({
       name: "",
-      email: "",
-      phone: "",
-      is_verified: 0,
-      status: 0,
-      uuid: "",
-      password: "",
-      role_id: null,
+      description: "",
+      category: "",
     });
   };
 
@@ -363,7 +365,7 @@ const SubCategoryList = ({ title = "Manage Sub-Category" }) => {
           modalName={modalName}
           addSubCategory={addSubCategory}
           // deleteConfrim={deleteConfrim}
-          rolesList={rolesList}
+          categoryList={categoryList}
         />
       )}
 
@@ -380,6 +382,7 @@ const SubCategoryList = ({ title = "Manage Sub-Category" }) => {
             setEditRow={setEditRow}
             setSelectedSubCategories={setSelectedSubCategories}
             // deleteConfirmAll={deleteConfirmAll}
+            editRecord={editRecord}
             searchRequest={searchRequest}
             resetSubCategory={resetSubCategory}
           />

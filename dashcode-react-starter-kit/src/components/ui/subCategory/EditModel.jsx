@@ -19,23 +19,15 @@ const EditModel = ({
   modalName,
   addSubCategory,
   deleteConfrim,
-  rolesList,
+  categoryList,
 }) => {
-  useEffect(() => {
-    if (modalName === "add") {
-      (subCategory.password = ""), resetSubCategory();
-    } else {
-      delete subCategory.password;
-    }
-    // console.log("subCategory detail => ", subCategory);
-  }, []);
   const navigate = useNavigate();
   const handleInputs = (e) => {
     setSubCategory((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const handleSelect = (e) => {
     console.log("slect value", e);
-    setSubCategory((prev) => ({ ...prev, ["role_id"]: e.value }));
+    setSubCategory((prev) => ({ ...prev, ["category"]: e.value }));
   };
   const [errors, setErrors] = useState({});
   const { isLoading } = useSelector((state) => state.loader);
@@ -56,31 +48,8 @@ const EditModel = ({
       error.name = "Name should be minimum 3 letters";
       valid = false;
     }
-    if (modalName === "add") {
-      if (!subCategory?.password) {
-        error.password = "Password is required";
-        valid = false;
-      } else if (!password.test(subCategory?.password)) {
-        error.password = "Password must be minimum 8 letters without spaces";
-        valid = false;
-      }
-    }
-    if (!subCategory?.phone) {
-      error.phone = "Phone is required";
-      valid = false;
-    } else if (!phoneNumberPattern.test(subCategory?.phone)) {
-      error.phone = "Phone is Invalid";
-      valid = false;
-    }
-    if (!subCategory?.email) {
-      error.email = "Email is required";
-      valid = false;
-    } else if (!regex.test(subCategory?.email)) {
-      error.email = "Email is invalid";
-      valid = false;
-    }
-    if (!subCategory?.role_id) {
-      error.role_id = "SubCategory role is required";
+    if (!subCategory?.category) {
+      error.category = "Category is required";
       valid = false;
     }
 
@@ -90,12 +59,8 @@ const EditModel = ({
   const resetSubCategory = () => {
     setSubCategory({
       name: "",
-      email: "",
-      phone: "",
-      is_verified: 0,
-      status: 0,
-      uuid: "",
-      role_id: null,
+      description: "",
+      category: "",
     });
   };
   const styles = {
@@ -176,68 +141,44 @@ const EditModel = ({
           onKeyUp={validateForm}
         />
         <Textinput
-          label="SubCategory Email"
-          type="email"
-          inputName="email"
-          defaultValue={subCategory?.email}
+          label="SubCategory Discription "
+          type="text"
+          inputName="description"
+          defaultValue={subCategory?.description}
           onChange={handleInputs}
-          placeholder="Type your subCategory email"
-          error={errors.email}
-          onKeyUp={validateForm}
+          placeholder="Type your subCategory description"
         />
         <label className="form-label" htmlFor="mul_1">
-          Role
+          Category
         </label>
-        {rolesList.length > 0 ? (
+        {categoryList.length > 0 ? (
           <div className="">
             <Select
               isClearable={false}
-              defaultValue={rolesList.map((data) => {
-                return data.value === subCategory?.role_id ? data : null;
+              defaultValue={categoryList.map((data) => {
+                return data.value === subCategory?.value ? data : null;
               })}
               styles={styles}
               // closeMenuOnSelect={false}
               onChange={handleSelect}
-              name="role_id"
-              options={rolesList}
+              name="category"
+              options={categoryList}
               className="react-select"
               classNamePrefix="select"
               id="mul_1"
             />
-            {errors?.role_id && (
-              <p className="text-sm text-danger-500">{errors?.role_id}</p>
+            {errors?.category && (
+              <p className="text-sm text-danger-500">{errors?.category}</p>
             )}
           </div>
         ) : (
           <p
             className="text-sm text-red-600 cursor-pointer after:content-['_↗'] pl-2.5"
-            onClick={() => navigate("/role-management")}
+            onClick={() => navigate("/category")}
           >
-            Please add Role before assiging
+            Please add Category before assiging
           </p>
         )}
-        <div className="flex items-center gap-x-6 my-3">
-          <Switch
-            label="Is Verified"
-            value={subCategory?.is_verified}
-            onChange={() =>
-              setSubCategory((prev) => ({
-                ...prev,
-                is_verified: prev.is_verified === 1 ? 0 : 1,
-              }))
-            }
-          />
-          <Switch
-            label="Status"
-            value={subCategory?.status}
-            onChange={() =>
-              setSubCategory((prev) => ({
-                ...prev,
-                status: prev.status === 1 ? 0 : 1,
-              }))
-            }
-          />
-        </div>
       </div>
     </Modal>
   );

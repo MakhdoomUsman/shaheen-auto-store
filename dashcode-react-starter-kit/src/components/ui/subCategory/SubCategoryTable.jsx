@@ -29,6 +29,7 @@ const SubCategoryTable = ({
   // deleteConfirmAll,
   searchRequest,
   resetSubCategory,
+  editRecord,
 }) => {
   const { globalSearch } = useSelector((state) => state.subCategory);
   const { itemsPerPage } = useSelector((state) => state.subCategory);
@@ -169,6 +170,7 @@ const SubCategoryTable = ({
             onClick={() => (
               setModalName("add"),
               setIsEditModal((prev) => !prev),
+              editRecord(),
               resetSubCategory()
             )}
           />

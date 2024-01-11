@@ -2,13 +2,22 @@
 const SubCategory = require("../models/SubCategory");
 const SubCategoryModel = require("../models/handleModels/SubCategoryModel");
 const utils = require("../utils/utils");
+const utilsWithoutPagination = require("../utils/utilsWithoutPagination");
 
 // Create a new subcategory
 const createSubCategory = async (req, res) => {
   try {
     const newSubCategory = new SubCategory(req.body);
     await newSubCategory.save();
-    res.status(201).json(newSubCategory);
+
+    const response = utilsWithoutPagination.generateSimpleResponse(
+      "SUCCESS",
+      201,
+      "SubCategory Created!",
+      newSubCategory
+    );
+
+    res.status(201).json(response);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
